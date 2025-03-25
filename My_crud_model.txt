@@ -1,0 +1,131 @@
+<?php
+class My_crud_model extends CI_Model{
+    
+    public function getAllEmployee(){
+       
+        $query=$this->db->get('employees');
+       
+        if($query){
+            return $query->result();
+        }else{
+            log_message('error','database query failed'.$this->db->last_query());
+        }
+  
+    }
+    public function getModalData($modal_type,$id){
+        switch ($modal_type) {
+            case 'department':
+                return $this->db->get_where('departments', ['department_id' => $id])->row();
+            case 'manager':
+                return $this->db->get_where('managers', ['manager_id' => $id])->row();
+            case 'address':
+                return $this->db->get_where('addresses', ['address_id' => $id])->row();
+            default:
+                return null;
+        }
+    }
+
+    public function insertemployee($data) {
+        $query = $this->db->insert('employees', $data);
+        if ($query) {
+            return $this->db->insert_id();
+        } else {
+            log_message('error', 'Insert into Address failed: ' . $this->db->last_query());
+            return false;
+        }
+    }
+
+
+    public function insertDepartment($data) {
+        $query = $this->db->insert('departments', $data);
+        if ($query) {
+            return $this->db->insert_id();
+        } else {
+            log_message('error', 'Insert into Address failed: ' . $this->db->last_query());
+            return false;
+        }
+    }
+
+    public function insertManager($data) {
+        $query = $this->db->insert('managers', $data);
+        if ($query) {
+            return $this->db->insert_id();
+        } else {
+            log_message('error', 'Insert into Address failed: ' . $this->db->last_query());
+            return false;
+        }
+    }
+
+    public function insertAddress($data) {
+        $query = $this->db->insert('addresses', $data);
+        if ($query) {
+            return $this->db->insert_id();
+        } else {
+            log_message('error', 'Insert into Address failed: ' . $this->db->last_query());
+            return false;
+        }
+    }
+
+    public function getDepartmentById($id) {
+        return $this->db->where('department_id', $id)->get('departments')->row();
+    }
+   
+    public function getManagerById($id) {
+        return $this->db->where('manager_id', $id)->get('managers')->row();
+    }
+    
+    public function getAddressById($id) {
+        return $this->db->where('address_id', $id)->get('addresses')->row();
+    }
+
+    public function getSingleEmployee($id){
+        $this->db->where('emp_id',$id);
+        $query=$this->db->get('employees');
+        if($query)
+        {
+            return $query->row();
+        }
+    }
+
+    public function updateEmployee($data, $id){
+        $this->db->where('emp_id',$id);
+        $query=$this->db->update('employees',$data);
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function autoincemp()
+    {
+        $query = $this->db->query("SELECT emp_id FROM employees ORDER BY emp_id DESC LIMIT 1");
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row_array();
+            $last_id = preg_replace('/[^0-9]/', '', $row['emp_id']); 
+            $new_id = (int) $last_id + 1;
+            return "EMP" . sprintf('%04d', $new_id); 
+        } else {
+            return "EMP0001"; 
+        }
+    }
+
+    public function deleteEmployee($id){
+        $this->db->where('emp_id',$id);
+        $query=$this->db->delete('employees');
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+}
+/*'public function validate_dob($dob) {
+    $dob = new DateTime($dob);
+    $today = new DateTime();
+    $age = $today->diff($dob)->y; // Calculate age
+}*/
+?>
+
+

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crud Operation </title>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/bootstrap.min.css">
+<style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
+
+.container {
+    height: calc(100vh - 120px); 
+    overflow-y: auto; 
+    padding: 10px;
+}
+
+.jumbotron {
+    margin-bottom: 0;
+    padding: 20px;
+}
+
+.table {
+    margin-top: 0; 
+}
+.fixed-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1000;
+        padding: 10px 0;
+        border-bottom: 2px solid #ddd;
+    }
+
+  
+    .table-container {
+        max-height: calc(100vh - 150px);
+        overflow-y: auto;
+    }
+    
+      #btn1{
+        background-color:#007bff;
+        color: white;
+        border-radius: 5px;
+        border:none;
+        padding: 8px 20px;
+        cursor: pointer;
+      }
+      .modal-content{
+        display: flex;
+        width: 800px;
+        justify-content: center;
+        right:30%  ;
+      
+  
+   }
+
+
+</style>
+
+</head>
+<body>
+    <div class="jumbotron">
+    <h1 align="center" style="color:lightblue;" >CRUD</h1>
+    </div>
+   
+    <div class="container">
+        <div class="clear-fix">
+            <h3 style="float: left;">All Employees</h3>
+            <a href="#" class="btn btn-primary" style="float:right" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Employee</a>
+        </div>
+       
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Emp_Code</th>
+                    <th>Full_Name</th>
+                    <th>Email</th>
+                    <th>Phone No</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Designation</th>
+                    <th>Salary</th>
+                    <th>Join_Date</th>
+                    <th>Hobbies</th>
+                    <th>Achievements</th>
+                    <th>Profile Pic</th>
+                    <th>Department_id</th>
+                    <th>Manager_id</th>
+                    <th>Address_id</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+           
+           <?php foreach($emp_details as $emp): ?>
+           
+            <tr>
+              <td><?php echo $emp->emp_code; ?></td>
+                <td><?php echo $emp->full_name; ?></td>
+                <td><?php echo $emp->email; ?></td>
+                <td><?php echo $emp->phone_no; ?></td>
+                <td><?php echo $emp->dob; ?></td>
+                <td><?php echo $emp->gender; ?></td>
+                <td><?php echo $emp->designation; ?></td>
+                <td><?php echo $emp->salary; ?></td>
+                <td><?php echo $emp->join_date; ?></td>
+                <td><?php echo $emp->hobbies; ?></td>
+                <td><?php echo $emp->achievements; ?></td>
+                <td><a href="<?= base_url();?>images/<?php echo $emp->profile_pic?>"><?php echo $emp->profile_pic;?></a></td>
+                <td> 
+                <a href="<?= base_url('My_crud/index?modal_type=department&id=' . $emp->department_id); ?>">
+                <?= $emp->department_id; ?>
+                </a>
+                </td>
+
+                <td><a href="<?= base_url('My_crud/index?modal_type=manager&id=' . $emp->manager_id); ?>">
+                <?= $emp->manager_id; ?>
+                </a></td>
+
+                <td>  <a href="<?= base_url('My_crud/index?modal_type=address&id=' . $emp->address_id); ?>">
+                <?= $emp->address_id; ?>
+                </a></td>
+
+                <td>
+                    <div class="btn-group">
+                    <a href="<?php echo base_url();?>My_crud/editEmployee/<?php echo $emp->emp_id?>" class="btn btn-success ">Edit</a>
+                    <a href="<?php echo base_url();?>My_crud/deleteEmployee/<?php echo $emp->emp_id?>" class="btn btn-danger data-inline-true">Delete</a>
+                    </div>
+                </td>
+
+            </tr>
+            <?php endforeach;?>
+            <tbody>
+        </table>
+    </div>
+   
+    
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+ 
+  <div class="modal-content" >
+    
+      <form action="<?php echo base_url();?>My_crud/addEmployee" enctype="multipart/form-data" method="post">
+       
+      <div class="modal-header" style="background-color:lightgrey">
+          <h5 class="modal-title" >Add Employee</h5>
+      </div>
+      
+        <div class="modal-body">
+         
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="full_name">Full name</label>
+            <input type="text" name="full_name" id="full_name" class="form-control" value="<?php echo set_value('full_name')?>" style="text-transform:capitalize;" required>
+          </div>
+          </div>
+          <div class="col-md-6">
+
+          <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" class="form-control" value="<?php echo set_value('email')?>" required>
+          </div>
+          </div>
+          </div>
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="phone_no">Phone No</label>
+            <input type="text" name="phone_no" id="phone_no" class="form-control"   maxlength="15" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="dob">DOB</label>
+            <input type="date" name="dob" id="dob" class="form-control"   required>
+          </div>
+          </div>
+          </div>
+
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label>Gender:</label><br>
+            <label for="male" style="font-size:large;">Male</label>
+            <input type="radio" name="gender" id="male" value="male" required>
+                <span style="margin-right: 20px;"></span>
+            <label style="font-size:large;">Female <input type="radio" name="gender" id="female" value="female" ></label>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="designation">Designation</label>
+            <input type="text" name="designation" id="designation" class="form-control"  onkeypress="return event.charCode>=65 && event.charCode<=122 || event.charCode==32" required>
+          </div>
+          </div>
+          </div>
+
+          <div class="row g-3">   
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="text" name="salary" id="salary" class="form-control"     required>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="join_date">Join Date</label>
+            <input type="date" name="join_date" id="join_date" class="form-control" required>
+          </div>
+          </div>
+          </div>
+
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="hobbies">Hobbies</label>
+            <input type="text" name="hobbies" id="hobbies" class="form-control"    required>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="achievements">Achievements</label>
+          <input type="text" name="achievements" id="achievements" class="form-control" >
+          </div>
+          </div>
+           </div>
+
+           <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="profile_pic">Profile Pic</label>
+            <input type="file" name="profile_pic" id="profile_pic" class="form-control" required>
+        
+          </div>
+          </div>
+           </div>
+
+            
+
+          <div class="modal-header">
+          <h5 class="modal-title">Other details</h5>
+          </div>
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="department_name">Department Name</label>
+            <input type="text" name="department_name" id="department_name" class="form-control"  required>
+          </div>
+          </div>
+          
+         
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="manager_name">Manager Name</label>
+            <input type="text" name="manager_name" id="manager_name" class="form-control" style="text-transform:capitalize;" required>
+          </div>
+          </div>
+          </div>
+
+          <div class="modal-header">
+          <h5 class="modal-title">Address details</h5>
+          </div>
+
+          
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="address_line1"> Address line 1</label>
+          <input type="text" name="address_line1" id="address_line1" class="form-control"  required>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="address_line2"> Address line 2</label>
+          <input type="text" name="address_line2" id="address_line2" class="form-control"  required>
+          </div>
+          </div>
+          </div>
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" name="city" id="city" class="form-control" style="text-transform:capitalize" onkeypress="return event.charCode>=65 && event.charCode<=122 || event.charCode==32" required>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="state">State</label>
+          <input type="text" name="state" id="state" class="form-control" style="text-transform:capitalize" onkeypress="return event.charCode>=65 && event.charCode<=122 || event.charCode==32" required>
+          </div>
+          </div>
+          </div>
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="country">Country</label>
+          <input type="text" name="country" id="country" class="form-control" style="text-transform:capitalize" onkeypress="return event.charCode>=65 && event.charCode<=122 || event.charCode==32" required>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="postal_code">Postal Code</label>
+          <input type="text" name="postal_code" id="postal_code" class="form-control" maxlength="6" onkeypress="return event.charCode>=48 && event.charCode<=57" required>
+          </div>
+          </div>
+          </div>
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="house_number">House number</label>
+          <input type="text" name="house_number" id="house_number" class="form-control"  required>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="street_name">Street Name</label>
+          <input type="text" name="street_name" id="street_name" class="form-control"  required>
+          </div>
+          </div>
+          </div>
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="landmark">Landmark</label>
+          <input type="text" name="landmark" id="landmark" class="form-control"  required>
+          </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="area">Area</label>
+          <input type="text" name="area" id="area" class="form-control"  required>
+          </div>
+          </div>
+          </div>  
+         
+
+          <div class="row g-3">
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="is_permanent_address">Is This Your Permanent Address</label>
+          <select name="is_permanent_address" id="is_permanent_address" class="form-control"  required>
+            <option value="">Select value</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+          </div>
+
+          <div class="col-md-6">
+          <div class="form-group">
+          <label for="same_as_permanent">Same as permanent</label><br>
+          <input type="hidden" name="same_as_permanent" value="No"> 
+          <input type="checkbox" name="same_as_permanent" id="same_as_permanent" value="Yes" class="form-check-input" style="margin:auto;">
+          
+         </div>
+          </div>
+          </div>
+          
+        </div>
+
+          <div class="modal-footer" style="background-color:lightgrey">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <input type="submit" name="insert" value="Add Employee" class="btn btn-info">
+        </div>
+      </form>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<?php if (isset($modal_data) && $modal_data): ?>
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"style="background-color:lightgrey; line-height=0.8">
+                <h4 class="modal-title">
+                    <?= ucfirst($modal_type) . " Details"; ?>
+                </h4>
+                <div class="modal-footer">
+             <button type="button" id="btn1" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.href='<?= base_url('My_crud/index');?>'">close</button>   
+             </div>
+            </div>
+            <div class="modal-body">
+    <?php if ($modal_type == 'department' && isset($modal_data)): ?>
+        <p><strong>Department ID:</strong> <?= $modal_data->department_id; ?></p>
+        <p><strong>Department Name:</strong> <?= $modal_data->department_name; ?></p>
+    <?php elseif ($modal_type == 'manager' && isset($modal_data)): ?>
+        <p><strong>Manager ID:</strong> <?= $modal_data->manager_id; ?></p>
+        <p><strong>Manager Name:</strong> <?= $modal_data->manager_name; ?></p>
+    <?php elseif ($modal_type == 'address' && isset($modal_data)): ?>
+        <p><strong>Address ID:</strong> <?= $modal_data->address_id; ?></p>
+        <p><strong>Address Line 1:</strong> <?= $modal_data->address_line1; ?></p>
+        <p><strong>Address Line 2:</strong> <?= $modal_data->address_line2; ?></p>
+        <p><strong>City:</strong> <?= $modal_data->city; ?></p>
+        <p><strong>State:</strong> <?= $modal_data->state; ?></p>
+        <p><strong>Country:</strong> <?= $modal_data->country; ?></p>
+        <p><strong>Postal Code:</strong> <?= $modal_data->postal_code; ?></p>
+        <p><strong>House Number:</strong> <?= $modal_data->house_number; ?></p>
+        <p><strong>Street Name:</strong> <?= $modal_data->street_name; ?></p>
+        <p><strong>Landmark:</strong> <?= $modal_data->landmark; ?></p>
+        <p><strong>Area:</strong> <?= $modal_data->area; ?></p>
+        <p><strong>Is This Your Permanent Address:</strong> <?= $modal_data->is_permanent_address; ?></p>
+       
+
+      
+    <?php else: ?>
+        <p>No details available.</p>
+    <?php endif; ?>
+</div>
+
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+
+<?php if($this->session->flashdata('imageError')): ?>
+<div class="alert alert-success text-center" style="position: fixed; top: 0; width: 100%;">
+<?php echo $this->session->flashdata('imageError')?>
+</div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('error')): ?>
+<div class="alert alert-success text-center" style="position: fixed; top: 0; width: 100%;">
+<?php echo $this->session->flashdata('error')?>
+</div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('inserted')): ?>
+<div class="alert alert-success text-center" style="position: fixed; top: 0; width: 100%;">
+<?php echo $this->session->flashdata('inserted')?>
+</div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('updated')): ?>
+<div class="alert alert-success text-center" style="position: fixed; top: 0; width: 100%; ">
+<?php echo $this->session->flashdata('updated')?>
+</div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('deleted')): ?>
+<div class="alert alert-success text-center" style="position: fixed; top: 0; width: 100%">
+<?php echo $this->session->flashdata('deleted')?>
+</div>
+<?php endif; ?>
+
+<script>
+    setTimeout(function(){
+      let message=document.querySelectorAll('.alert');
+      message.forEach(function(msg){
+        msg.style.display='none';
+      })
+    },2000)
+   
+        
+</script>
+ 
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script></body>
+</html>
+
